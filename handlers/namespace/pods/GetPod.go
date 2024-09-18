@@ -11,7 +11,7 @@ import (
 
 // GetPod [GET/:namespace/:podName]
 func GetPod(c *fiber.Ctx) error {
-	nameSpace := c.Params("nameSpace")
+	nameSpace := c.Params("namespace")
 	podName := c.Params("podName")
 	client := config.ClientSetCoreV1()
 
