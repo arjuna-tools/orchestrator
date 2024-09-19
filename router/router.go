@@ -7,4 +7,6 @@ import (
 
 func SetupRoutes(app *fiber.App) {
 	app.Get("/:namespace/:podName", pods.GetPod)
+	app.Post("/:namespace/:podName", pods.CreatePod)
+	app.Delete("/:namespace/:podName", pods.DeletePod)
 }

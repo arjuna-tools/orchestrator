@@ -17,7 +17,7 @@ func GetPod(c *fiber.Ctx) error {
 
 	pod, err := client.Pods(nameSpace).Get(context.TODO(), podName, v1.GetOptions{})
 	if err != nil {
-		return c.JSON(&struct_type.ErrorResponse{
+		return c.Status(500).JSON(&struct_type.ErrorResponse{
 			Message: "Unable to fetch pod info",
 			Error:   err.Error(),
 		})
