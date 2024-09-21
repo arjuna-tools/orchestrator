@@ -6,6 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2/log"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
+	"orchestrator/config"
 	"orchestrator/router"
 	"orchestrator/struct_type"
 )
@@ -39,6 +40,28 @@ func main() {
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Arjuna Orchestrator 🔥")
+	})
+
+	app.Use(func(c *fiber.Ctx) error {
+		authHeader := c.Get("Authorization")
+
+		// Check if the Authorization header is missing
+		if authHeader == "" {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+				"status":  "error",
+				"message": "Missing Authorization header",
+			})
+		}
+
+		if authHeader != config.EnvConfig("API_TOKEN") {
+			return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
+				"status":  "error",
+				"message": "Invalid Authorization Token!",
+			})
+		}
+
+		// Continue processing the request if the token is valid
+		return c.Next()
 	})
 
 	router.SetupRoutes(app)
