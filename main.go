@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"orchestrator/router"
 	"orchestrator/struct_type"
@@ -31,6 +32,10 @@ func main() {
 	})
 
 	app.Use(recover.New())
+
+	app.Use(logger.New(logger.Config{
+		Format: "[${ip}]:${port} [${latency}] ${status} - ${method} ${path}\n",
+	}))
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Arjuna Orchestrator 🔥")
